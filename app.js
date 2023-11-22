@@ -62,6 +62,7 @@ const Gameboard = function (){
     }
 
     return {
+        getBoard,
         printBoard,
         move,
         checkWin,
@@ -135,7 +136,49 @@ const GameController = function (){
 
     return {
         playRound,
+        getActivePlayer,
+        getBoard: board.getBoard,
     }
 };
 
-const game = GameController();
+const ScreenController = function (){
+    const game = GameController();
+    const boardEl = document.getElementById("board");
+    const playerTurnEl = document.getElementById("turn");
+
+    const updateScreen = () => {
+        boardEl.textContent = "";
+
+        const board = game.getBoard();
+        const activePlayer = game.getActivePlayer();
+
+        playerTurnEl.textContent = `${activePlayer.name}'s turn`;
+
+        // render board
+        board.forEach((row, rowIndex) => {
+            row.forEach((cell, colIndex) => {
+                const cellButton = document.createElement("button");
+                cellButton.classList.add("cell");
+                cellButton.dataset.cell = (rowIndex * 3 + colIndex) + 1
+                cellButton.textContent = cell;
+                boardEl.appendChild(cellButton);
+            });
+        });
+    }
+
+    const clickHandlerBoard = (e) => {
+        const selectedCell = e.target.dataset.cell;
+        if(!selectedCell) return;
+
+        game.playRound(selectedCell);
+
+        updateScreen();
+    }
+
+    boardEl.addEventListener("click", clickHandlerBoard);
+
+    // initial render
+    updateScreen();
+}
+
+ScreenController();

@@ -1,0 +1,27 @@
+.board {
+    display: grid;
+    height: 600px;
+    width: 600px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    border: 1px solid transparent;
+    gap: 0.25rem;
+    padding: 0.25rem;
+    background-color: #1B435D;
+    border-radius: 0.25rem;
+}
+
+
+.cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 3rem;
+    border: 1px solid transparent;
+    background-color: #D5EEFF;
+    cursor: pointer;
+    color: #1B435D ;
+    border-radius: 0.25rem;
+    font-weight: bold;
+}
