@@ -1,4 +1,4 @@
-const Gameboard = (function (){
+const Gameboard = function (){
     const row = 3;
     const column = 3;
     const board = [];
@@ -15,6 +15,7 @@ const Gameboard = (function (){
     }
 
     const printBoard = () => {
+        let boardString = "";
         for(let i = 0; i < row ; i++){
             let rowString = "";
             for(let j = 0; j < column; j++){
@@ -22,8 +23,9 @@ const Gameboard = (function (){
                 rowString += cellValue !== null ? cellValue : "_";
                 rowString += "  ";
             }
-            console.log(rowString)
+            boardString += rowString + "\n";
         }
+        console.log(boardString);
     }
 
     const move = (cell, mark) => {
@@ -55,11 +57,85 @@ const Gameboard = (function (){
         return false;
     }
 
-    const resetBoard = () => {
-        board.forEach(row => row.fill(null));
+    const checkTie = () => {
+        return board.every(row => row.every(cell => cell !== null));
     }
 
     return {
-        getBoard,
+        printBoard,
+        move,
+        checkWin,
+        checkTie,
     }
-})();
+};
+
+
+const GameController = function (){
+    const board = Gameboard();
+
+    const players = [
+        {
+            name : "Player One",
+            marker: "X",
+        },
+        {
+            name: "Player Two",
+            marker: "O",
+        }
+    ];
+
+    let activePlayer = players[0];
+
+    let currentRound = 1;
+
+    const getActivePlayer = () => activePlayer;
+
+    const getCurrentRound = () => currentRound;
+
+    const nextRound = () => currentRound++;
+
+    const switchPlayerTurn = () => {
+        activePlayer = activePlayer === players[0] ? players[1] : players[0];
+    }
+
+    const printNewRound = ()=> {
+        console.log(`ROUND ${getCurrentRound()}`);
+        board.printBoard();
+        console.log(`${getActivePlayer().name}'s turn.`)
+    }
+
+    const winMessage = () => {
+        board.printBoard();
+        console.log(`GAME OVER... Player ${getActivePlayer().name} wins! Congratulations!`);
+    }
+
+    const tieMessage = () => {
+        board.printBoard();
+        console.log(`GAME OVER... It's a tie! The game is draw.`);
+    }
+
+    const playRound = (selectedCell) => {
+        console.log(`Player ${getActivePlayer().name} selected cell ${selectedCell} and placed the mark ${getActivePlayer().marker}.`)
+
+        board.move(selectedCell, getActivePlayer().marker);
+
+        if(board.checkWin()){
+            winMessage();
+        }else if(board.checkTie()){
+            tieMessage();
+        }else{
+            switchPlayerTurn();
+            nextRound();
+            printNewRound();
+        }
+    }
+
+    // Initial play game message
+    printNewRound();
+
+    return {
+        playRound,
+    }
+};
+
+const game = GameController();
