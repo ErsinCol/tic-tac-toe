@@ -1,3 +1,8 @@
+:root {
+    --cell-color: #D5EEFF;
+    --bg-board: #1B435D;
+}
+
 .board {
     display: grid;
     height: 600px;
@@ -7,7 +12,7 @@
     border: 1px solid transparent;
     gap: 0.25rem;
     padding: 0.25rem;
-    background-color: #1B435D;
+    background-color: var(--bg-board);
     border-radius: 0.25rem;
 }
 
@@ -19,9 +24,9 @@
     text-align: center;
     font-size: 3rem;
     border: 1px solid transparent;
-    background-color: #D5EEFF;
+    background-color: var(--cell-color);
     cursor: pointer;
-    color: #1B435D ;
+    color: var(--bg-board) ;
     border-radius: 0.25rem;
     font-weight: bold;
 }

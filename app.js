@@ -70,7 +70,6 @@ const Gameboard = function (){
     }
 };
 
-
 const GameController = function (){
     const board = Gameboard();
 
@@ -168,7 +167,8 @@ const ScreenController = function (){
 
     const clickHandlerBoard = (e) => {
         const selectedCell = e.target.dataset.cell;
-        if(!selectedCell) return;
+        const selectedCellValue = e.target.innerText;
+        if(!selectedCell || selectedCellValue) return;
 
         game.playRound(selectedCell);
 
