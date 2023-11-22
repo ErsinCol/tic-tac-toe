@@ -10,17 +10,17 @@
 </head>
 <body>
     <div id="app" class="app">
-        <h1>Tic Tac Toe</h1>
-        <div class="inital-screen">
-            <form>
-                <label for="player1-name">Player1 Name</label>
-                <input id="player1-name" type="text" autocomplete="off">
-                <label for="player2-name">Player2 Name</label>
-                <input id="player2-name" type="text" autocomplete="off">
-                <button type="submit" id="start-btn">Start Game</button>
+        <div class="title">Tic Tac Toe</div>
+        <div class="inital-screen" id="initial-screen">
+            <form id="form">
+                <label for="player1-name">player1 name</label>
+                <input id="player1-name" type="text" required autocomplete="off">
+                <label for="player2-name">player2 name</label>
+                <input id="player2-name" type="text" required autocomplete="off">
+                <button type="submit" id="start-btn" class="start-btn">Start Game</button>
             </form>
         </div>
-        <div id="game" class="game">
+        <div id="game" class="hidden">
             <div id="board" class="board"></div>
             <div class="flow-game">
                 <button id="restart-btn" type="button">Restart Game</button>

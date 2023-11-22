@@ -61,30 +61,42 @@ const Gameboard = function (){
         return board.every(row => row.every(cell => cell !== null));
     }
 
+    const clearBoard = () => {
+        board.forEach(row=>{
+            row.fill(null);
+        });
+    }
+
     return {
         getBoard,
         printBoard,
         move,
         checkWin,
         checkTie,
+        clearBoard,
     }
 };
 
-const GameController = function (){
+const createPlayer = function (name, marker){
+    return {
+        name,
+        marker,
+        score: 0,
+        increaseScore: () => {
+            this.score++;
+        }
+    }
+}
+
+const GameController = function (player1, player2){
     const board = Gameboard();
 
     const players = [
-        {
-            name : "Player One",
-            marker: "X",
-        },
-        {
-            name: "Player Two",
-            marker: "O",
-        }
-    ];
+        player1,
+        player2,
+    ]
 
-    let activePlayer = players[0];
+    let activePlayer =  players[0];
 
     let isOver = false;
 
@@ -93,6 +105,7 @@ const GameController = function (){
     const getIsOver = () => isOver;
 
     const getOverMessage = () => overMessage;
+
 
     const getActivePlayer = () => activePlayer;
 
@@ -127,18 +140,26 @@ const GameController = function (){
         playRound,
         getActivePlayer,
         getBoard: board.getBoard,
+        clearBoard: board.clearBoard,
         getIsOver,
         getOverMessage,
     }
 };
 
 const ScreenController = function (){
-    // let game = GameController();
+    let game;
+    let playerOne;
+    let playerTwo;
+
+    const initialScreenEl = document.getElementById("initial-screen");
+    const gameContainerEl = document.getElementById("game");
     const boardEl = document.getElementById("board");
     const playerTurnEl = document.getElementById("turn");
     const gameResultEl = document.getElementById("game-result");
     const restartBtn = document.getElementById("restart-btn");
-    const startBtn = document.getElementById("start-btn");
+    const form = document.getElementById("form");
+    const playerOneNameEl =  document.getElementById("player1-name");
+    const playerTwoNameEl = document.getElementById("player2-name");
 
     const updateScreen = () => {
         boardEl.textContent = "";
@@ -178,23 +199,33 @@ const ScreenController = function (){
     }
 
     const clickHandlerRestart = () => {
-        game = GameController();
+        game = GameController(playerOne, playerTwo);
         updateScreen();
     }
 
-    const clickHandlerStart = (e) => {
-        e.preventDefault();
+    const clickHandlerStart = (event) => {
+        event.preventDefault();
 
-        console.log("Oyuncu bilgileri alınacak oyuncular oluşturulacak ve oyun başlayacak.")
+        playerOne = createPlayer(playerOneNameEl.value, "X");
+        playerTwo = createPlayer(playerTwoNameEl.value, "0");
+
+        game = GameController(playerOne, playerTwo);
+
+        initialScreenEl.classList.add("hidden");
+        gameContainerEl.classList.remove("hidden");
+
+        updateScreen();
     }
 
     boardEl.addEventListener("click", clickHandlerBoard);
 
     restartBtn.addEventListener("click", clickHandlerRestart);
 
-    startBtn.addEventListener("click", clickHandlerStart);
+    form.addEventListener("submit", clickHandlerStart)
 
     // initial render
     // updateScreen();
 }
+
+ScreenController();
 
