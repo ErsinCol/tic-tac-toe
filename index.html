@@ -9,9 +9,25 @@
     <title>Tic-Tac-Toe Game</title>
 </head>
 <body>
-    <div id="app">
-        <div id="board" class="board"></div>
-        <div id="turn" class="turn"></div>
+    <div id="app" class="app">
+        <h1>Tic Tac Toe</h1>
+        <div class="inital-screen">
+            <form>
+                <label for="player1-name">Player1 Name</label>
+                <input id="player1-name" type="text" autocomplete="off">
+                <label for="player2-name">Player2 Name</label>
+                <input id="player2-name" type="text" autocomplete="off">
+                <button type="submit" id="start-btn">Start Game</button>
+            </form>
+        </div>
+        <div id="game" class="game">
+            <div id="board" class="board"></div>
+            <div class="flow-game">
+                <button id="restart-btn" type="button">Restart Game</button>
+                <div id="turn" class="turn"></div>
+                <div id="game-result" class="game-result"></div>
+            </div>
+        </div>
     </div>
 
     <script src="app.js"></script>

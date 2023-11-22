@@ -86,72 +86,66 @@ const GameController = function (){
 
     let activePlayer = players[0];
 
-    let currentRound = 1;
+    let isOver = false;
+
+    let overMessage = "";
+
+    const getIsOver = () => isOver;
+
+    const getOverMessage = () => overMessage;
 
     const getActivePlayer = () => activePlayer;
-
-    const getCurrentRound = () => currentRound;
-
-    const nextRound = () => currentRound++;
 
     const switchPlayerTurn = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
     }
 
-    const printNewRound = ()=> {
-        console.log(`ROUND ${getCurrentRound()}`);
-        board.printBoard();
-        console.log(`${getActivePlayer().name}'s turn.`)
-    }
-
-    const winMessage = () => {
-        board.printBoard();
-        console.log(`GAME OVER... Player ${getActivePlayer().name} wins! Congratulations!`);
-    }
-
-    const tieMessage = () => {
-        board.printBoard();
-        console.log(`GAME OVER... It's a tie! The game is draw.`);
+    const overMessageGenerator = (isWin) => {
+        if(isWin){
+            overMessage =  `GAME OVER, ${getActivePlayer().name} wins!`;
+        }else{
+            overMessage = `GAME OVER, It's a tie!`;
+        }
     }
 
     const playRound = (selectedCell) => {
-        console.log(`Player ${getActivePlayer().name} selected cell ${selectedCell} and placed the mark ${getActivePlayer().marker}.`)
 
         board.move(selectedCell, getActivePlayer().marker);
 
         if(board.checkWin()){
-            winMessage();
+            isOver = true;
+            overMessageGenerator(true);
         }else if(board.checkTie()){
-            tieMessage();
+            isOver = true;
+            overMessageGenerator(false);
         }else{
             switchPlayerTurn();
-            nextRound();
-            printNewRound();
         }
     }
-
-    // Initial play game message
-    printNewRound();
 
     return {
         playRound,
         getActivePlayer,
         getBoard: board.getBoard,
+        getIsOver,
+        getOverMessage,
     }
 };
 
 const ScreenController = function (){
-    const game = GameController();
+    // let game = GameController();
     const boardEl = document.getElementById("board");
     const playerTurnEl = document.getElementById("turn");
+    const gameResultEl = document.getElementById("game-result");
+    const restartBtn = document.getElementById("restart-btn");
+    const startBtn = document.getElementById("start-btn");
 
     const updateScreen = () => {
         boardEl.textContent = "";
 
         const board = game.getBoard();
         const activePlayer = game.getActivePlayer();
-
-        playerTurnEl.textContent = `${activePlayer.name}'s turn`;
+        const gameOver = game.getIsOver();
 
         // render board
         board.forEach((row, rowIndex) => {
@@ -163,6 +157,14 @@ const ScreenController = function (){
                 boardEl.appendChild(cellButton);
             });
         });
+
+        if(gameOver){
+            gameResultEl.classList.add("block");
+            playerTurnEl.classList.add("hidden");
+            gameResultEl.textContent = game.getOverMessage();
+        }else{
+            playerTurnEl.textContent = `${activePlayer.name}'s turn`;
+        }
     }
 
     const clickHandlerBoard = (e) => {
@@ -175,10 +177,24 @@ const ScreenController = function (){
         updateScreen();
     }
 
+    const clickHandlerRestart = () => {
+        game = GameController();
+        updateScreen();
+    }
+
+    const clickHandlerStart = (e) => {
+        e.preventDefault();
+
+        console.log("Oyuncu bilgileri alınacak oyuncular oluşturulacak ve oyun başlayacak.")
+    }
+
     boardEl.addEventListener("click", clickHandlerBoard);
 
+    restartBtn.addEventListener("click", clickHandlerRestart);
+
+    startBtn.addEventListener("click", clickHandlerStart);
+
     // initial render
-    updateScreen();
+    // updateScreen();
 }
 
-ScreenController();
