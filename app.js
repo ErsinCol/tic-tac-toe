@@ -77,26 +77,33 @@ const Gameboard = function (){
     }
 };
 
-const createPlayer = function (name, marker){
+const Players = function (){
+    let players = [];
+
+    const getPlayers = () => players;
+
+    const addPlayer = (name, marker) => {
+        players.push({
+            name,
+            marker,
+            score: 0,
+        })
+    }
+
     return {
-        name,
-        marker,
-        score: 0,
-        increaseScore: () => {
-            this.score++;
-        }
+        getPlayers,
+        addPlayer,
     }
 }
 
-const GameController = function (player1, player2){
+const GameController = function (playerOneName, playerTwoName){
+    const players = Players();
+    players.addPlayer(playerOneName, "X");
+    players.addPlayer(playerTwoName, "O");
+
     const board = Gameboard();
 
-    const players = [
-        player1,
-        player2,
-    ]
-
-    let activePlayer =  players[0];
+    let activePlayer =  players.getPlayers()[0];
 
     let isOver = false;
 
@@ -105,7 +112,6 @@ const GameController = function (player1, player2){
     const getIsOver = () => isOver;
 
     const getOverMessage = () => overMessage;
-
 
     const getActivePlayer = () => activePlayer;
 
@@ -148,18 +154,16 @@ const GameController = function (player1, player2){
 
 const ScreenController = function (){
     let game;
-    let playerOne;
-    let playerTwo;
 
-    const initialScreenEl = document.getElementById("initial-screen");
-    const gameContainerEl = document.getElementById("game");
-    const boardEl = document.getElementById("board");
-    const playerTurnEl = document.getElementById("turn");
-    const gameResultEl = document.getElementById("game-result");
-    const restartBtn = document.getElementById("restart-btn");
-    const form = document.getElementById("form");
-    const playerOneNameEl =  document.getElementById("player1-name");
-    const playerTwoNameEl = document.getElementById("player2-name");
+    const formContainer = document.querySelector(".game-form");
+    const gameContainer = document.querySelector(".app__game");
+
+    const form = document.querySelector(".game-form__form");
+    const boardEl = document.querySelector(".game__board");
+
+    const playerTurnEl = document.querySelector(".state__turn");
+    const gameResultEl = document.querySelector("state__game-result");
+
 
     const updateScreen = () => {
         boardEl.textContent = "";
@@ -172,7 +176,7 @@ const ScreenController = function (){
         board.forEach((row, rowIndex) => {
             row.forEach((cell, colIndex) => {
                 const cellButton = document.createElement("button");
-                cellButton.classList.add("cell");
+                cellButton.classList.add("board__cell");
                 cellButton.dataset.cell = (rowIndex * 3 + colIndex) + 1
                 cellButton.textContent = cell;
                 boardEl.appendChild(cellButton);
@@ -180,8 +184,6 @@ const ScreenController = function (){
         });
 
         if(gameOver){
-            gameResultEl.classList.add("block");
-            playerTurnEl.classList.add("hidden");
             gameResultEl.textContent = game.getOverMessage();
         }else{
             playerTurnEl.textContent = `${activePlayer.name}'s turn`;
@@ -198,33 +200,23 @@ const ScreenController = function (){
         updateScreen();
     }
 
-    const clickHandlerRestart = () => {
-        game = GameController(playerOne, playerTwo);
-        updateScreen();
-    }
-
     const clickHandlerStart = (event) => {
         event.preventDefault();
 
-        playerOne = createPlayer(playerOneNameEl.value, "X");
-        playerTwo = createPlayer(playerTwoNameEl.value, "0");
+        const playerOneName = document.getElementById("player1-name").value;
+        const playerTwoName = document.getElementById("player2-name").value;
 
-        game = GameController(playerOne, playerTwo);
+        game = GameController(playerOneName, playerTwoName);
 
-        initialScreenEl.classList.add("hidden");
-        gameContainerEl.classList.remove("hidden");
+        formContainer.classList.add("game-form--hidden");
+        gameContainer.classList.remove("game--hidden");
 
         updateScreen();
     }
 
     boardEl.addEventListener("click", clickHandlerBoard);
 
-    restartBtn.addEventListener("click", clickHandlerRestart);
-
     form.addEventListener("submit", clickHandlerStart)
-
-    // initial render
-    // updateScreen();
 }
 
 ScreenController();
