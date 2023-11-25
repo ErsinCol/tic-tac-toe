@@ -14,18 +14,27 @@ html, body {
 }
 
 .app__header {
-    font-size: 3rem;
+    font-size: 5rem;
     font-weight: bold;
-    color: #1B435D;
+    color: transparent;
     margin: 2rem 0;
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(27,67,93,1) 35%, rgba(0,212,255,1) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.app__game {
+    font-weight: bold
 }
 
 .game-form__form {
     width: 30rem;
     border: 1px solid #ccc;
     border-radius: 0.5rem;
-    padding: 2rem;
-    background-color: #1B435D;
+    padding: 3rem;
+    background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(27,67,93,1) 35%, rgba(0,212,255,1) 100%);
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
     display: flex;
     flex-direction: column;
@@ -40,20 +49,36 @@ html, body {
 
 .form__input {
     width: 100%;
-    padding: 0.5rem;
+    padding: 0.75rem;
+    border-radius: 0.25rem;
     box-sizing: border-box;
     margin-bottom: 1rem;
     font-size: 1rem;
 }
 
-.form__start-btn {
-    background-color: #D5EEFF;
-    padding: 0.5rem 1rem;
-    border: none;
+.form__start-btn,
+.state__restart-btn{
+    background-color: #fff;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid #ccc;
     border-radius: 0.25rem;
     cursor: pointer;
     align-self: flex-end;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.form__start-btn {
     margin: 2rem 0 0 0;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.form__start-btn:hover {
+    transform: scale(1.1);
+}
+
+.form__start-btn:active {
+    transform: scale(0.9);
 }
 
 .app__game {
@@ -107,14 +132,22 @@ html, body {
     align-items: center;
 }
 
-.game--hidden {
+.hidden {
     display: none;
 }
 
-.game-form--hidden {
-    display: none;
+.winner-animation {
+    animation: winnerAnimation 1s ease-in-out;
 }
 
-.game-result--hidden {
-    display: none;
+@keyframes winnerAnimation {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
 }

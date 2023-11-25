@@ -13,29 +13,29 @@
         <div class="app__header">Tic Tac Toe</div>
         <div class="app__form game-form">
             <form class="game-form__form form">
-                <label for="player1-name" class="form__label">player1 name</label>
+                <label for="player1-name" class="form__label">Player 1 Name: </label>
                 <input id="player1-name" class="form__input" type="text" required autocomplete="off">
-                <label for="player2-name" class="form__label">player2 name</label>
+                <label for="player2-name" class="form__label">Player 2 Name: </label>
                 <input id="player2-name" class="form__input" type="text" required autocomplete="off">
                 <button type="submit" class="form__start-btn">Start Game</button>
             </form>
         </div>
-        <div class="app__game game game--hidden">
+        <div class="app__game game hidden">
             <div class="game__players players">
                 <div class="players__player player player1">
                     <div class="player__name"></div>
-                    <div class="player__score">0</div>
+                    <div class="player__score"></div>
                 </div>
                 <div class="players__player player player2">
                     <div class="player__name"></div>
-                    <div class="player__score">0</div>
+                    <div class="player__score"></div>
                 </div>
             </div>
             <div class="game__board board"></div>
             <div class="game__state state">
                 <button type="button" class="state__restart-btn">Restart Game</button>
                 <div class="state__turn"></div>
-                <div class="state__game-result game-result--hidden"></div>
+                <div class="state__game-result hidden"></div>
             </div>
         </div>
     </div>
