@@ -96,14 +96,10 @@ const Players = function (){
     }
 }
 
-const GameController = function (playerOneName, playerTwoName){
-    const players = Players();
-    players.addPlayer(playerOneName, "X");
-    players.addPlayer(playerTwoName, "O");
-
+const GameController = function (players){
     const board = Gameboard();
 
-    let activePlayer =  players.getPlayers()[0];
+    let activePlayer = players[0];
 
     let isOver = false;
 
@@ -154,6 +150,7 @@ const GameController = function (playerOneName, playerTwoName){
 
 const ScreenController = function (){
     let game;
+    let players;
 
     const formContainer = document.querySelector(".game-form");
     const gameContainer = document.querySelector(".app__game");
@@ -162,10 +159,17 @@ const ScreenController = function (){
     const boardEl = document.querySelector(".game__board");
 
     const playerTurnEl = document.querySelector(".state__turn");
-    const gameResultEl = document.querySelector("state__game-result");
+    const gameResultEl = document.querySelector(".state__game-result");
 
+    const restartBtn = document.querySelector(".state__restart-btn");
+
+
+    const player1NameDisplay = document.querySelector(".player1 .player__name");
+    const player2NameDisplay = document.querySelector(".player2 .player__name");
 
     const updateScreen = () => {
+        player1NameDisplay.textContent = players.getPlayers()[0].name;
+        player2NameDisplay.textContent = players.getPlayers()[1].name;
         boardEl.textContent = "";
 
         const board = game.getBoard();
@@ -200,13 +204,22 @@ const ScreenController = function (){
         updateScreen();
     }
 
+    const clickHandlerRestart = () => {
+        game = GameController(players.getPlayers());
+        updateScreen();
+    }
+
     const clickHandlerStart = (event) => {
         event.preventDefault();
 
         const playerOneName = document.getElementById("player1-name").value;
         const playerTwoName = document.getElementById("player2-name").value;
 
-        game = GameController(playerOneName, playerTwoName);
+        players = Players();
+        players.addPlayer(playerOneName, "X");
+        players.addPlayer(playerTwoName, "O");
+
+        game = GameController(players.getPlayers());
 
         formContainer.classList.add("game-form--hidden");
         gameContainer.classList.remove("game--hidden");
@@ -217,6 +230,8 @@ const ScreenController = function (){
     boardEl.addEventListener("click", clickHandlerBoard);
 
     form.addEventListener("submit", clickHandlerStart)
+
+    restartBtn.addEventListener("click", clickHandlerRestart);
 }
 
 ScreenController();
